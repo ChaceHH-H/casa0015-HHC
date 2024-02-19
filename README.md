@@ -1,5 +1,5 @@
 # Water Reminder
-An app to help people drink more water.
+As we all know, water is the most important substance needed for human life, NHS recommends that people should aim to drink 1.2L to 2L of water a day. But for some people, drinking enough water is a challenge, so I wanted to make an app to help people drink more water
 
 ## Use this README File 
 
