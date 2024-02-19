@@ -3,6 +3,7 @@ As we all know, water is the most important substance needed for human life, NHS
 
 ## Storyboard and UI design
 ![Storyboard](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/Storyboard.jpg)
+![UI](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/UI-1.png)
 
 ## Include A Section That Tells Developers How To Install The App
 
