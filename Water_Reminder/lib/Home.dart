@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'clock.dart';
 import 'history.dart';
 import 'Water.dart';
-import 'package:water_reminder/my_flutter_app_icons.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int currentTab = 0;
+  int currentTab = 2;
   final List<Widget> screens = [
     Water(),
     history(),
@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = Water();
+  Widget currentScreen = clock();
 
   @override
   Widget build(BuildContext context) {
