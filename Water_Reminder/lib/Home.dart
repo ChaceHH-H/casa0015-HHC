@@ -44,8 +44,8 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 10,
+        //shape: CircularNotchedRectangle(),
+        //notchMargin: 10,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
