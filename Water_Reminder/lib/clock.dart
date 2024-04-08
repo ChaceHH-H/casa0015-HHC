@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:water_reminder/Home.dart';
 
 
 class Timevalue{
@@ -97,6 +98,16 @@ class _clockState extends State<clock> {
   void getTimepicker2() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     endtime = prefs.getString("Timepicker2")!;
+    print('$endtime');
+    int hour = int.parse(endtime.split(":")[0]);
+    String amPm = endtime.split(" ")[1];
+    if (amPm == "PM" && hour < 12) {
+      hour += 12;
+    }
+    else if (amPm == "AM" && hour == 12) {
+      hour = 0;
+    }
+    print(hour);
   }
 
 
@@ -133,7 +144,7 @@ class _clockState extends State<clock> {
                       setState(() {
                         clockstatus = val;
                         saveSwitchState(val);
-                        //print('Saved state is $clockstatus');
+
                       });
                     },
                   )
@@ -190,6 +201,7 @@ class _clockState extends State<clock> {
                               endtime = _endTime.format(context);
                               setState(() {});
                               saveTimepicker2(endtime);
+                              print("new time $endtime");
                             }
                           },
                           interval: const Duration(hours: 1),

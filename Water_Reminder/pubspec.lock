@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  cron:
+    dependency: "direct main"
+    description:
+      name: cron
+      sha256: "06e8d65e25bb040a10d8f6086df9a88ab9db57fda19a458c4f85fa5fdc80ac3f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -269,6 +277,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  slide_countdown:
+    dependency: "direct main"
+    description:
+      name: slide_countdown
+      sha256: e093b7d65f2236df90ce4f1fd7e0428446983f826b2e6e851aafe9749bf542bf
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
   source_span:
     dependency: transitive
     description:
@@ -293,6 +309,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  stream_duration:
+    dependency: transitive
+    description:
+      name: stream_duration
+      sha256: d4e833a8db38faec87325ca784079d1e90ba66f78c365ca96f353a59b26bd62e
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.2"
   string_scanner:
     dependency: transitive
     description:
