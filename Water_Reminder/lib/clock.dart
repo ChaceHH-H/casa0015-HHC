@@ -45,7 +45,7 @@ class _clockState extends State<clock> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     getSwitchValues();
   }

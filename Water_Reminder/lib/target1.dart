@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
 
 class target1 extends StatefulWidget {
   const target1({super.key});
@@ -14,6 +13,12 @@ class _target1State extends State<target1> {
   double WValue= 18;
   double DValue = 1;
   double TargetgValie = 1;
+
+  int intageValue= 18;
+  int intHValue= 18;
+  int intWValue= 18;
+  int intDValue = 1;
+  int intTargetgValie = 1;
 
 
 
@@ -35,7 +40,7 @@ class _target1State extends State<target1> {
               Container(
                 child: Column(
                   children: [
-                    Text('How old are you> $ageValue',style: TextStyle(fontSize: 20),),
+                    Text('How old are you = $intageValue',style: TextStyle(fontSize: 20),),
 
                     Slider(
                         value: ageValue,
@@ -45,12 +50,13 @@ class _target1State extends State<target1> {
                         onChanged: (double value) {
                           setState(() {
                             ageValue = value;
+                            intageValue =ageValue.truncate();
                           });
                         },
                         label: ageValue.round().toString(),
                       ),
 
-                    Text('Height ($HValue CM)',style: TextStyle(fontSize: 20),),
+                    Text('Height ($intHValue CM)',style: TextStyle(fontSize: 20),),
 
                     Slider(
                         value: HValue,
@@ -60,12 +66,13 @@ class _target1State extends State<target1> {
                         onChanged: (double value) {
                           setState(() {
                             HValue = value;
+                            intHValue=HValue.truncate();
                           });
                         },
                         label: HValue.round().toString(),
                       ),
 
-                    Text('Weight ($WValue KG)',style: TextStyle(fontSize: 20),),
+                    Text('Weight ($intWValue KG)',style: TextStyle(fontSize: 20),),
                     Slider(
                         value: WValue,
                         min: 0,
@@ -74,6 +81,7 @@ class _target1State extends State<target1> {
                         onChanged: (double value) {
                           setState(() {
                             WValue = value;
+                            intWValue=WValue.truncate();
                           });
                         },
                         label: WValue.round().toString(),
@@ -82,13 +90,13 @@ class _target1State extends State<target1> {
                     ElevatedButton(
                       child: Text("Calculate target",style: TextStyle(fontSize: 20),),
                       onPressed: () {
-                        TargetgValie = WValue*40;
+                        intDValue = intWValue*40;
                         setState(() {});
                       },
                     ),
                     SizedBox(height: 30),
 
-                    Text('$TargetgValie Ml',style: TextStyle(fontSize: 46,fontWeight: FontWeight.w600),),
+                    Text('$intDValue Ml',style: TextStyle(fontSize: 46,fontWeight: FontWeight.w600),),
                     Slider(
                       value: DValue,
                       min: 0,
@@ -97,7 +105,8 @@ class _target1State extends State<target1> {
                       onChanged: (double value) {
                         setState(() {
                           DValue = value;
-                          TargetgValie = DValue;
+                          intDValue=DValue.truncate();
+
                         });
                       },
                       label: DValue.round().toString(),
@@ -105,7 +114,7 @@ class _target1State extends State<target1> {
                     ElevatedButton(
                       child: Text("Finish",style: TextStyle(fontSize: 20),),
                       onPressed: () {
-                        Navigator.pop(context,TargetgValie);
+                        Navigator.pop(context,intDValue);
 
                       },
                     ),

@@ -1,9 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
+import 'package:water_reminder/clock.dart';
 import 'package:water_reminder/clock_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slide_countdown/slide_countdown.dart';
+import 'package:water_reminder/history.dart';
 import 'package:water_reminder/target1.dart';
+import 'package:water_reminder/drink.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Water extends StatefulWidget {
@@ -14,9 +20,14 @@ class Water extends StatefulWidget {
 }
 
 class _WaterState extends State<Water> {
-  double  Targetdrink = 1500;
+  int  Targetdrink = 1500;
   int Drinkingnum = 200;
+  @override
+  void initState() {
 
+    super.initState();
+    gettarget();
+  }
 
   showAlertDialog(BuildContext context) {
 
@@ -55,6 +66,24 @@ class _WaterState extends State<Water> {
       },
     );
   }
+
+  void savetarget(int value) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("target", value);
+    print('target Value saved $value');
+    //return prefs.setInt("TimeState", value);
+  }
+  void gettarget() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      Targetdrink = prefs.getInt("target")!;
+    });
+
+    print('target$Targetdrink');
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +154,11 @@ class _WaterState extends State<Water> {
 
                   ]
               ),
+              ElevatedButton(
+                onPressed: (){
+                  _adddrink(context);
+                },
+                child: Text('Add')),
               SizedBox(height: 30),
               Row(
                 mainAxisSize:MainAxisSize.min ,
@@ -158,16 +192,23 @@ class _WaterState extends State<Water> {
       Targetdrink = result;
       print('$Targetdrink');
     });
-
-
-    // When a BuildContext is used from a StatefulWidget, the mounted property
-    // must be checked after an asynchronous gap.
+    savetarget(Targetdrink);
     if (!context.mounted) return;
 
-    // After the Selection Screen returns a result, hide any previous snackbars
-    // and show the new result.
-    // ScaffoldMessenger.of(context)
-    //   ..removeCurrentSnackBar()
-    //   ..showSnackBar(SnackBar(content: Text('$result')));
+  }
+  Future<void> _adddrink(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const drink1()),
+    );
+    setState(() {
+      Drinkingnum = result;
+      print('DRINK $Drinkingnum');
+    });
+
+    if (!context.mounted) return;
+
   }
 }
