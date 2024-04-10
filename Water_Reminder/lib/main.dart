@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Home.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   //用于确保Flutter的Widgets绑定已经初始化。
@@ -8,6 +10,8 @@ void main() async {
   // 初始化通知帮助类
   NotificationHelper notificationHelper = NotificationHelper();
   await notificationHelper.initialize();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

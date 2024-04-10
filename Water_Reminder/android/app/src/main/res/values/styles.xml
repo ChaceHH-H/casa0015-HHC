@@ -15,4 +15,11 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+    <string name="google_app_id" translatable="false">1:226303980858:android:7ac344d07f38c8b4f34c03</string>
+    <string name="gcm_defaultSenderId" translatable="false">226303980858</string>
+    <string name="default_web_client_id" translatable="false">client-id.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://your-database-url.firebaseio.com</string>
+    <string name="google_api_key" translatable="false">api-key</string>
+    <string name="google_crash_reporting_api_key" translatable="false">crash-reporting-api-key</string>
+    <string name="project_id" translatable="false">fir-flutter-codelab-a80ae</string>
 </resources>

@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
   }
 
 
-  int currentTab = 0;
+  int currentTab = 1;
   final List<Widget> screens = [
     Water(),
     history(),
@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
   final PageStorageBucket bucket = PageStorageBucket();
   final NotificationHelper _notificationHelper = NotificationHelper();
   bool clockstatus = false;
-  Widget currentScreen = Water();
+  Widget currentScreen = history();
   int _currentTimevalue = 30;
   String startime = '1';
   String endtime = '1';

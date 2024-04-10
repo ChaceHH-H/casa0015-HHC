@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
 
 android {
     namespace "com.example.water_reminder"
@@ -45,6 +45,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -59,3 +60,4 @@ android {
 flutter {
     source '../..'
 }
+apply plugin: 'com.google.gms.google-services'

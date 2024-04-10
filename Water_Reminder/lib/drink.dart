@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class drink1 extends StatefulWidget {
   const drink1({super.key});
@@ -10,8 +12,10 @@ class drink1 extends StatefulWidget {
 }
 
 class _drinkState extends State<drink1> {
+  FirebaseFirestore pushfirestore = FirebaseFirestore.instance;
   double drinkvalue111 = 0;
   int drinkvalue = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +65,17 @@ class _drinkState extends State<drink1> {
               ),
               ElevatedButton(
                   onPressed: (){
-                    Navigator.pop(context,drinkvalue);
+                    if(drinkvalue111 !=0){
+                      pushfirestore.collection('water-history').add({
+                        'watervalue': drinkvalue, // 喝水量
+                        'date': FieldValue.serverTimestamp(), // 使用Firebase的服务器时间戳
+                      });
+                      Navigator.pop(context,drinkvalue);
+                    }
+                    // pushfirestore.collection('water-history').add({
+                    //   'watervalue': drinkvalue, // 喝水量
+                    //   'date': FieldValue.serverTimestamp(), // 使用Firebase的服务器时间戳
+                    // });
                   },
                   child: Text('Add')),
             ],
