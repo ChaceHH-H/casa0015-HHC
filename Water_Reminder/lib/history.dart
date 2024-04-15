@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:fl_chart/fl_chart.dart';
+
+enum ViewMode { day, week, month }
 
 class history extends StatefulWidget {
   const history({super.key});
@@ -10,126 +13,97 @@ class history extends StatefulWidget {
 }
 
 class _historyState extends State<history> {
+  DateTime selectedDate = DateTime.now();
+  int totalIntake = 0; // 假设的总摄入量
+  List<Map<String, dynamic>> intakeList = []; // 用于存储水量记录
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Today\'s Water History'),
-      ),
-      body: Stack(
-        children: [
-          DraggableScrollableSheet(
-            initialChildSize: 0.2, // 面板起始高度占屏幕的比例
-            minChildSize: 0.2,  // 面板最小高度占屏幕的比例
-            maxChildSize: 0.5,  // 面板最大高度占屏幕的比例
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24.0),
-                    topRight: Radius.circular(24.0),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 10.0,
-                      color: Colors.black26,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Icon(Icons.drag_handle),
-                    Expanded(
-                      child: _buildWaterHistoryList(context, scrollController),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    fetchDataForSelectedDate(); // 初始加载今天的数据
   }
 
-  Widget _buildWaterHistoryList(BuildContext context, ScrollController scrollController) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: fetchTodaysWaterHistory(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error.toString()}'));
-        } else if (snapshot.hasData) {
-          return ListView.builder(
-            controller: scrollController,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              var record = snapshot.data![index];
-              return Dismissible(
-                key: Key(record['id']),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) {
-                  FirebaseFirestore.instance.collection('water-history').doc(record['id']).delete();
-                },
-                confirmDismiss: (direction) => showDeleteConfirmDialog(context),
-                background: Container(color: Colors.red),
-                child: ListTile(
-                  leading: Icon(Icons.water_drop, color: Colors.blue),
-                  title: Text('${record['watervalue']} ml'),
-                  trailing: Text(DateFormat('HH:mm').format(record['date'])),
-                ),
-              );
-            },
-          );
-        } else {
-          return Center(child: Text('No data found'));
-        }
-      },
-    );
-  }
-
-  Future<List<Map<String, dynamic>>> fetchTodaysWaterHistory() async {
-    DateTime now = DateTime.now();
-    DateTime startOfDay = DateTime(now.year, now.month, now.day);
-    DateTime endOfDay = DateTime(now.year, now.month, now.day + 1);
+  // 从Firestore获取选定日期的水量记录
+  void fetchDataForSelectedDate() async {
+    DateTime startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    DateTime endOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day + 1);
 
     var snapshot = await FirebaseFirestore.instance
         .collection('water-history')
         .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
         .where('date', isLessThan: Timestamp.fromDate(endOfDay))
-        .orderBy('date', descending: true)
         .get();
 
-    return snapshot.docs.map((doc) {
+    totalIntake = 0; // 重置总摄入量
+    intakeList = snapshot.docs.map((doc) {
+      var data = doc.data();
+      totalIntake += (data['watervalue'] as num).toInt();
       return {
-        "id": doc.id,
-        "date": (doc.data() as dynamic)['date'].toDate(),
-        "watervalue": doc.data()['watervalue'],
+        "time": (data['date'] as Timestamp).toDate(),
+        "amount": data['watervalue'],
       };
     }).toList();
+
+    setState(() {}); // 刷新UI
   }
 
-  Future<bool> showDeleteConfirmDialog(BuildContext context) async {
-    return (await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this record?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('水量记录'),
+      ),
+      body: Column(
+        children: [
+          // 顶部的天/周/月切换栏
+          // ...
+
+          // 日期选择器
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.chevron_left),
+                  onPressed: () {
+                    setState(() {
+                      selectedDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day - 1);
+                      fetchDataForSelectedDate();
+                    });
+                  },
+                ),
+                Text(
+                  DateFormat('yyyy-MM-dd').format(selectedDate),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  icon: Icon(Icons.chevron_right),
+                  onPressed: () {
+                    setState(() {
+                      selectedDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day + 1);
+                      fetchDataForSelectedDate();
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Delete'),
+
+          // 水量记录列表
+          Expanded(
+            child: ListView.builder(
+              itemCount: intakeList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text('${intakeList[index]['amount']} ml'),
+                  subtitle: Text(DateFormat('HH:mm').format(intakeList[index]['time'])),
+                );
+              },
+            ),
           ),
         ],
       ),
-    )) ?? false;
+    );
   }
-
 }

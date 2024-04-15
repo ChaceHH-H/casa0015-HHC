@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 import 'package:water_reminder/clock.dart';
 import 'package:water_reminder/clock_icons.dart';
@@ -31,7 +32,7 @@ class _WaterState extends State<Water> {
 
     super.initState();
     Cvalue();
-    compareDateWithToday();
+    //compareDateWithToday();
   }
 
   showAlertDialog(BuildContext context) {
@@ -87,11 +88,7 @@ class _WaterState extends State<Water> {
     print('target$Targetdrink');
   }
 
-  void savetoday(int value,) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt("todayvalue", value);
-    print('target Value saved $value');
-  }
+
   Future<void> saveDate() async {
     DateTime time1111 = DateTime.now();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -106,28 +103,7 @@ class _WaterState extends State<Water> {
     return null; // 如果没有找到保存的日期，则返回null
   }
 
-  Future<void> compareDateWithToday() async {
-    DateTime? savedDate = await loadDate();
 
-    if (savedDate != null) {
-      DateTime now = DateTime.now();
-      DateTime today = DateTime(now.year, now.month, now.day);
-
-      // 仅比较日期部分
-      savedDate = DateTime(savedDate.year, savedDate.month, savedDate.day);
-
-      if (savedDate.isBefore(today)) {
-        print("The saved date is before today.");
-        Targetdrink = 0;
-        savetarget(Targetdrink);
-      } else if (savedDate.isAtSameMomentAs(today)) {
-        print("The saved date is today.");
-        gettarget();
-      }
-    } else {
-      print("No date saved.");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,16 +113,14 @@ class _WaterState extends State<Water> {
         title: const Text('Water'),
       ),
         body:
-        Center(
-          child: Container(
+        Stack(
+          children:[Container(
             child: Column(
-              //mainAxisSize:MainAxisSize.min,
               children: [
                 SizedBox(height: 50),
                 Container(
-                  alignment: Alignment.center,
-                  height: 300,
-                  width: 300,
+                  height: 250,
+                  width: 250,
                   child: LiquidCircularProgressIndicator(
                     value: todayvalue/Targetdrink,
                     valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
@@ -159,7 +133,7 @@ class _WaterState extends State<Water> {
                 ),
                 SizedBox(height: 30),
                 Row(
-                    mainAxisSize:MainAxisSize.min ,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children:[
                       InkWell(
                         onTap: () {
@@ -170,7 +144,7 @@ class _WaterState extends State<Water> {
                             color: Colors.lightBlue[400],
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          alignment: Alignment.center,
+
                           height: 120,
                           width: 350,
                           child: Row(
@@ -185,7 +159,7 @@ class _WaterState extends State<Water> {
                                   Container(
                                     child: Row(
                                       children: [
-                                        Text('ml',style: TextStyle(fontSize: 25,color: Colors.white),),
+                                        Text('$todayvalue ml',style: TextStyle(fontSize: 25,color: Colors.white),),
                                         Text('/'+'$Targetdrink ml',style: TextStyle(fontSize: 20,color: Colors.white),)
                                       ],
                                     ),
@@ -206,18 +180,49 @@ class _WaterState extends State<Water> {
                     onPressed: (){
                       _adddrink(context);
                     },
-                    child: Text('Add')),
-                SizedBox(height: 30),
-                Row(
-                  mainAxisSize:MainAxisSize.min ,
-                  children: [
-
-                  ],
+                    child: Text('Add')
                 ),
+
+
+
               ],
             ),
           ),
+            DraggableScrollableSheet(
+              initialChildSize: 0.2, // 面板起始高度占屏幕的比例
+              minChildSize: 0.2,  // 面板最小高度占屏幕的比例
+              maxChildSize: 0.5,  // 面板最大高度占屏幕的比例
+              builder: (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(24.0),
+                      topRight: Radius.circular(24.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 10.0,
+                        color: Colors.black26,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(Icons.drag_handle),
+                      Expanded(
+                        child: _buildWaterHistoryList(context, scrollController),
+
+
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            ]
         ),
+
 
 
     );
@@ -252,6 +257,7 @@ class _WaterState extends State<Water> {
       Drinkingnum = result;
       print('DRINK $Drinkingnum');
       Cvalue();
+
     });
 
     if (!context.mounted) return;
@@ -259,76 +265,112 @@ class _WaterState extends State<Water> {
   }
 
   void Cvalue(){
-    percentage = ((todayvalue/Targetdrink)*100).truncate();
+      percentage = ((todayvalue/Targetdrink)*100).truncate();
   }
 
 
-  //////////////////////
-  Future<List<Map<String, dynamic>>> fetchTodaysWaterHistory() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // 获取今天的日期范围
+  ////////////////////
+  Widget _buildWaterHistoryList(BuildContext context, ScrollController scrollController) {
     DateTime now = DateTime.now();
-    DateTime todayStart = DateTime(now.year, now.month, now.day);
-    DateTime tomorrowStart = DateTime(now.year, now.month, now.day + 1);
+    DateTime startOfDay = DateTime(now.year, now.month, now.day);
+    DateTime endOfDay = DateTime(now.year, now.month, now.day + 1);
 
-    // 转换为Timestamp
-    Timestamp startTimestamp = Timestamp.fromDate(todayStart);
-    Timestamp endTimestamp = Timestamp.fromDate(tomorrowStart);
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('water-history')
+          .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+          .where('date', isLessThan: Timestamp.fromDate(endOfDay))
+          .orderBy('date', descending: true)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error.toString()}'));
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text('No water intake records found for today.'));
+        }
 
-    QuerySnapshot querySnapshot = await firestore
-        .collection('water-history')
-        .where('date', isGreaterThanOrEqualTo: startTimestamp)
-        .where('date', isLessThan: endTimestamp)
-        .orderBy('date', descending: true) // 降序排序
-        .get();
+        int newTodayValue = snapshot.data!.docs.fold<int>(0, (sum, doc) {
+          var data = doc.data() as Map<String, dynamic>;
+          return sum + (data['watervalue'] as num).toInt();
+        });
 
-    return querySnapshot.docs.map((doc) {
-      return {
-        "id": doc.id, // 包含文档ID
-        "date": (doc.data() as Map<String, dynamic>)['date'],
-        "watervalue": (doc.data() as Map<String, dynamic>)['watervalue'],
-      };
-    }).toList();
-  }
+        // Schedule a callback to update the state after the build phase
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (newTodayValue != todayvalue) {
+            setState(() {
+              todayvalue = newTodayValue;
+              percentage = ((todayvalue / Targetdrink) * 100).truncate(); // Update the percentage as well
+            });
+          }
+        });
 
-  Future<bool> showDeleteConfirmDialog(BuildContext context, String docId) async {
-    return await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Are you sure you want to delete this record?'),
-              ],
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Total water intake today: $todayvalue ml",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(false); // 用户点击取消，返回false
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () {
-                Navigator.of(context).pop(true); // 用户点击删除，返回true
-              },
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  var doc = snapshot.data!.docs[index];
+                  var data = doc.data() as Map<String, dynamic>;
+                  return Dismissible(
+                    key: Key(doc.id),
+                    background: Container(
+                      color: Colors.red,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.delete, color: Colors.white),
+                    ),
+                    direction: DismissDirection.endToStart,
+                    confirmDismiss: (direction) => showDeleteConfirmDialog(context),
+                    onDismissed: (direction) {
+                      FirebaseFirestore.instance.collection('water-history').doc(doc.id).delete();
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.water_drop, color: Colors.blue),
+                      title: Text('${data['watervalue']} ml'),
+                      trailing: Text(DateFormat('HH:mm').format((data['date'] as Timestamp).toDate())),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         );
       },
-    ) ?? false; // 如果点击对话框外部，返回false
+    );
   }
 
 
+  Future<bool> showDeleteConfirmDialog(BuildContext context) async {
+    return (await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text('Are you sure you want to delete this record?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    )) ?? false;
 
-
-
+  }
 
 
 }

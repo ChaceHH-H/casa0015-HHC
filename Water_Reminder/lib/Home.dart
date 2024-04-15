@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
   }
 
 
-  int currentTab = 1;
+  int currentTab = 0;
   final List<Widget> screens = [
     Water(),
     history(),
@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
   final PageStorageBucket bucket = PageStorageBucket();
   final NotificationHelper _notificationHelper = NotificationHelper();
   bool clockstatus = false;
-  Widget currentScreen = history();
+  Widget currentScreen = Water();
   int _currentTimevalue = 30;
   String startime = '1';
   String endtime = '1';
@@ -196,11 +196,11 @@ class _HomeState extends State<Home> {
         child: currentScreen,
         bucket: bucket,
       ),
-      floatingActionButton: FloatingActionButton.large(
+      floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.water_drop,
           color: currentTab == 0 ? Colors.blue : Colors.grey,
-          size: 50,
+          size: 35,
         ),
         onPressed: (){
           setState(() {
@@ -212,12 +212,12 @@ class _HomeState extends State<Home> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         //shape: CircularNotchedRectangle(),
-        //notchMargin: 10,
+        height: 50,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             MaterialButton(
-              height: 80,
+              height: 30,
               onPressed: (){
                 setState(() {
                   currentScreen = history();
@@ -229,11 +229,11 @@ class _HomeState extends State<Home> {
 
                 Icons.align_vertical_bottom,
                 color: currentTab == 1 ? Colors.blue : Colors.grey,
-                size: 40.0
+                size: 30.0
               ),
             ),
             MaterialButton(
-              height: 80,
+              height: 30,
               onPressed: (){
                 setState(() {
                   currentScreen = clock();
@@ -243,7 +243,7 @@ class _HomeState extends State<Home> {
               child: Icon(
                   Icons.access_alarm,
                 color: currentTab == 2 ? Colors.blue : Colors.grey,
-                size: 40.0
+                size: 30.0
               ),
             ),
           ],
