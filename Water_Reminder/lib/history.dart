@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 enum ViewMode { day, week, month }
 
+
 class history extends StatefulWidget {
   const history({super.key});
 
@@ -14,51 +15,96 @@ class history extends StatefulWidget {
 
 class _historyState extends State<history> {
   DateTime selectedDate = DateTime.now();
-  int totalIntake = 0; // 假设的总摄入量
-  List<Map<String, dynamic>> intakeList = []; // 用于存储水量记录
+  ViewMode viewMode = ViewMode.day;
+  int totalIntake = 0;
+  List<FlSpot> chartData = [];
 
   @override
   void initState() {
     super.initState();
-    fetchDataForSelectedDate(); // 初始加载今天的数据
+    fetchDataForSelectedDate();
   }
 
-  // 从Firestore获取选定日期的水量记录
+  void adjustDate(int addValue) {
+    setState(() {
+      if (viewMode == ViewMode.day) {
+        selectedDate = selectedDate.add(Duration(days: addValue));
+      } else if (viewMode == ViewMode.week) {
+        selectedDate = selectedDate.add(Duration(days: 7 * addValue));
+      } else if (viewMode == ViewMode.month) {
+        selectedDate = DateTime(selectedDate.year, selectedDate.month + addValue, selectedDate.day);
+      }
+      fetchDataForSelectedDate();
+    });
+  }
+
   void fetchDataForSelectedDate() async {
-    DateTime startOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    DateTime endOfDay = DateTime(selectedDate.year, selectedDate.month, selectedDate.day + 1);
+    DateTime start;
+    DateTime end;
+
+    if (viewMode == ViewMode.day) {
+      start = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+      end = start.add(Duration(days: 1));
+    } else if (viewMode == ViewMode.week) {
+      start = selectedDate.subtract(Duration(days: selectedDate.weekday - 1));
+      end = start.add(Duration(days: 7));
+    } else {
+      start = DateTime(selectedDate.year, selectedDate.month, 1);
+      end = DateTime(selectedDate.year, selectedDate.month + 1, 1);
+    }
 
     var snapshot = await FirebaseFirestore.instance
         .collection('water-history')
-        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where('date', isLessThan: Timestamp.fromDate(endOfDay))
+        .where('date', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
+        .where('date', isLessThan: Timestamp.fromDate(end))
+        .orderBy('date')
         .get();
 
-    totalIntake = 0; // 重置总摄入量
-    intakeList = snapshot.docs.map((doc) {
+    totalIntake = 0;
+    List<FlSpot> newChartData = [];
+    int index = 0;
+
+    for (var doc in snapshot.docs) {
       var data = doc.data();
       totalIntake += (data['watervalue'] as num).toInt();
-      return {
-        "time": (data['date'] as Timestamp).toDate(),
-        "amount": data['watervalue'],
-      };
-    }).toList();
+      DateTime date = (data['date'] as Timestamp).toDate();
+      double x = index.toDouble();
+      double y = (data['watervalue'] as num).toDouble();
+      newChartData.add(FlSpot(x, y));
+      index++;
+    }
 
-    setState(() {}); // 刷新UI
+    setState(() {
+      chartData = newChartData;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('水量记录'),
+        title: Text('History'),
       ),
       body: Column(
         children: [
-          // 顶部的天/周/月切换栏
-          // ...
-
-          // 日期选择器
+          ToggleButtons(
+            children: <Widget>[
+              Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Day')),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Week')),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 16), child: Text('Month')),
+            ],
+            isSelected: [
+              viewMode == ViewMode.day,
+              viewMode == ViewMode.week,
+              viewMode == ViewMode.month,
+            ],
+            onPressed: (index) {
+              setState(() {
+                viewMode = ViewMode.values[index];
+                fetchDataForSelectedDate();
+              });
+            },
+          ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -66,38 +112,41 @@ class _historyState extends State<history> {
               children: [
                 IconButton(
                   icon: Icon(Icons.chevron_left),
-                  onPressed: () {
-                    setState(() {
-                      selectedDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day - 1);
-                      fetchDataForSelectedDate();
-                    });
-                  },
+                  onPressed: () => adjustDate(-1),
                 ),
                 Text(
-                  DateFormat('yyyy-MM-dd').format(selectedDate),
+                  viewMode == ViewMode.day
+                      ? DateFormat('yyyy-MM-dd').format(selectedDate)
+                      : (viewMode == ViewMode.week
+                      ? 'Week of ${DateFormat('MMMd').format(selectedDate)}'
+                      : DateFormat('MMMM yyyy').format(selectedDate)),
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: Icon(Icons.chevron_right),
-                  onPressed: () {
-                    setState(() {
-                      selectedDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day + 1);
-                      fetchDataForSelectedDate();
-                    });
-                  },
+                  onPressed: () => adjustDate(1),
                 ),
               ],
             ),
           ),
-
-          // 水量记录列表
+          Container(
+            height: 200,
+            child: LineChart(
+              LineChartData(
+                borderData: FlBorderData(show: false),
+                lineBarsData: [
+                  LineChartBarData(spots: chartData),
+                ],
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
-              itemCount: intakeList.length,
+              itemCount: chartData.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('${intakeList[index]['amount']} ml'),
-                  subtitle: Text(DateFormat('HH:mm').format(intakeList[index]['time'])),
+                  title: Text('${chartData[index].y.toInt()} ml'),
+                  subtitle: Text('Index ${chartData[index].x.toInt()}'),
                 );
               },
             ),

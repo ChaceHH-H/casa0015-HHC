@@ -197,10 +197,11 @@ class _HomeState extends State<Home> {
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
         child: Icon(
           Icons.water_drop,
           color: currentTab == 0 ? Colors.blue : Colors.grey,
-          size: 35,
+          size: 40,
         ),
         onPressed: (){
           setState(() {
@@ -212,12 +213,12 @@ class _HomeState extends State<Home> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         //shape: CircularNotchedRectangle(),
-        height: 50,
+        height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             MaterialButton(
-              height: 30,
+              height: 40,
               onPressed: (){
                 setState(() {
                   currentScreen = history();
@@ -233,7 +234,7 @@ class _HomeState extends State<Home> {
               ),
             ),
             MaterialButton(
-              height: 30,
+              height: 40,
               onPressed: (){
                 setState(() {
                   currentScreen = clock();

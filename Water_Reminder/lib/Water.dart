@@ -176,11 +176,20 @@ class _WaterState extends State<Water> {
 
                     ]
                 ),
-                ElevatedButton(
-                    onPressed: (){
+                // ElevatedButton(
+                //     onPressed: (){
+                //       _adddrink(context);
+                //     },
+                //     child: Text('Add Record')
+                // ),
+                ElevatedButton.icon(
+                    onPressed: () {
                       _adddrink(context);
                     },
-                    child: Text('Add')
+                    icon: const Icon(Icons.add),
+                    label: const Text(
+                        "Add Record"
+                    )
                 ),
 
 
