@@ -9,7 +9,20 @@ Water Reminder is a mobile application designed to help users track and manage d
 - Drinking water reminder alarm page: Users can enable or turn off drinking water reminders, select the reminder frequency, and set a specific time period (such as night) to avoid receiving reminders.
 ![function1](https://github.com/ChaceHH-H/Image/blob/main/Screenshot_20240419_232528.jpg)![function2](https://github.com/ChaceHH-H/Image/blob/main/Screenshot_20240419_232543.jpg)![function3](https://github.com/ChaceHH-H/Image/blob/main/Screenshot_20240419_232550.jpg)
 In addition, the application also supports use with a physical device equipped with a water level sensor that automatically records the amount of water when the user drinks water and synchronizes it to the application.
-Suitable for users who are concerned about healthy drinking water and want to improve their drinking habits through technical means, Drinking Water Simulator provides a simple and effective solution.  
+Suitable for users who are concerned about healthy drinking water and want to improve their drinking habits through technical means, Drinking Water Simulator provides a simple and effective solution.
+
+<table>
+  <tr>
+    <td>First Screen Page</td>
+     <td>Holiday Mention</td>
+     <td>Present day in purple and selected day in pink</td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="screenshots/Screenshot_1582745092.png"></td>
+    <td valign="top"><img src="screenshots/Screenshot_1582745125.png"></td>
+    <td valign="top"><img src="screenshots/Screenshot_1582745139.png"></td>
+  </tr>
+ </table>
 ## Storyboard and UI design
 ![Storyboard](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/Storyboard.jpg)
 ![UI](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/UI-1.png)
