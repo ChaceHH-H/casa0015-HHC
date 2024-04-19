@@ -13,9 +13,9 @@ Suitable for users who are concerned about healthy drinking water and want to im
 
 <table>
   <tr>
-    <td>First Screen Page</td>
-     <td>Holiday Mention</td>
-     <td>Present day in purple and selected day in pink</td>
+    <td>Water Page</td>
+     <td>History Page</td>
+     <td>alarm page</td>
   </tr>
   <tr>
     <td valign="top"><img src="https://github.com/ChaceHH-H/Image/blob/main/Screenshot_20240419_232528.jpg"></td>
