@@ -23,15 +23,25 @@ Suitable for users who are concerned about healthy drinking water and want to im
     <td valign="top"><img src="https://github.com/ChaceHH-H/Image/blob/main/Screenshot_20240419_232550.jpg"></td>
   </tr>
  </table>
- 
+
+**Operation demonstration**  
+The video shows how to use the functions of the application, setting goals and adding data on the water page, viewing history on the history page, and setting the brain on the clock page.  
+
+https://github.com/ChaceHH-H/casa0015-HHC/assets/146041784/abbf4f32-00c4-447a-81ce-bdf4abf92025
+
+**Data-Firebase**  
+Drinking water data is uploaded and saved in firebase cloud firebase. In order to facilitate testing, the test mode is used.  
+<img width="948" alt="屏幕截图 2024-04-20 000113" src="https://github.com/ChaceHH-H/casa0015-HHC/assets/146041784/59a708f8-f6b3-4aa7-a766-895022dfeba7">
+
+
 ## Storyboard and UI design
 ![Storyboard](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/Storyboard.jpg)
 ![UI](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/UI-1.png)
 
 ## Include A Section That Tells Developers How To Install The App
 
-Include a section that gives intructions on how to install the app or run it in Flutter.  What versions of the plugins are you assuming?  Maybe define a licence
+
 
 ##  Contact Details
 
-Having Contact Details is also good as it shows people how to get in contact with you if they'd like to contribute to the app. 
+Huanchao Hong：soullnys747@gmail.com If you would like to contribute to this application, please feel free to contact me
