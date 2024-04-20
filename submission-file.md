@@ -20,25 +20,34 @@ Upload this PDF into Moodle for submission including a copy of your presentation
 
 ## Link to GitHub Repository
 
-Flutter Application Name - MY APPLICATION NAME
-GitHub Repository - [https://github.com/ucl-casa-ce/casa0015-mobile-assessment](https://github.com/ucl-casa-ce/casa0015-mobile-assessment)
+Flutter Application Name - Water Reminder
+GitHub Repository - [https://github.com/ChaceHH-H/casa0015-HHC](https://github.com/ChaceHH-H/casa0015-HHC)
 
 ## Introduction to Application
 
-A brief 200 word explanation of your application and it's use.  Below create a Bibliography to code, tutorial, or plugins you've used in the project. Use this guide
-for citation - [https://www.scribbr.co.uk/referencing/harvard-website-reference/](https://www.scribbr.co.uk/referencing/harvard-website-reference/)
+Water Reminder is a mobile app designed to help users stay hydrated. In busy daily life, many people often forget to drink water regularly. This app helps users improve this situation by setting personalized reminders. Users can customize their daily water intake based on their health goals and lifestyle. The app also tracks the user's drinking history and provides users with insights through statistics and trend graphs to promote healthy habits. In addition to the reminder function, it can also synchronize data with a cup with a water level sensor. The cup uses firebase to allow users to automatically upload drinking data after drinking water. 
 
 ## Biblography
-
-1. Last name, First initial. (Year published). Title. Edition. (Only include the edition if it is not the first edition) City published: Publisher, Page(s). <http://google.com>
-
-2. Last name, First initial. (Year published). Title. Edition. (Only include the edition if it is not the first edition) City published: Publisher, Page(s).  <http://google.com>
-
+cloud_firestore | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/cloud_firestore  
+firebase_storage | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/firebase_storage  
+fl_chart | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/fl_chart  
+flutter_local_notifications | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/flutter_local_notifications  
+flutter_switch package - All Versions. (n.d.). Dart Packages. https://pub.dev/packages/flutter_switch/versions  
+font_awesome_flutter | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/font_awesome_flutter  
+liquid_progress_indicator_v2 | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/liquid_progress_indicator_v2  
+notification_permissions package - All Versions. (n.d.). Dart Packages. https://pub.dev/packages/notification_permissions/versions  
+permission_handler | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/permission_handler  
+shared_preferences | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/shared_preferences  
+slide_countdown | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/slide_countdown  
+sliding_up_panel - Dart API docs. (n.d.). https://pub.dev/documentation/sliding_up_panel/latest/  
+syncfusion_flutter_sliders | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/syncfusion_flutter_sliders  
+time_range_picker | Flutter package. (n.d.). Dart Packages. https://pub.dev/packages/time_range_picker  
+  
 ----
 
 ## Declaration of Authorship
 
-We, AUTHORS NAME HERE, confirm that the work presented in this assessment is my own. Where information has been derived from other sources, I confirm that this has been indicated in the work.
+Me, Huanchao Hong, confirm that the work presented in this assessment is my own. Where information has been derived from other sources, I confirm that this has been indicated in the work.
 
 
 Digitally Sign with Your name Here
