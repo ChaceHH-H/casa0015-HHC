@@ -32,6 +32,7 @@ class _WaterState extends State<Water> {
 
     super.initState();
     Cvalue();
+    gettarget();
     //compareDateWithToday();
   }
 
