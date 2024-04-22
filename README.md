@@ -3,13 +3,15 @@ As we all know, water is the most important substance needed for human life, NHS
 
 Water Reminder is a mobile application designed to help users track and manage daily water drinking habits. Through three main function pages, the app not only allows users to set and monitor water drinking goals, but also view historical water drinking data and receive regular water drinking reminders.  
 
+[Landing page](https://chacehh-h.github.io/-chacehhh-.github.io/)  
 **Main function**
 - Water volume tracking main page (Water Page): displays the user’s daily water drinking goals and progress, and provides a button to quickly add water drinking records. All data is uploaded and stored to Firebase in real time.
 - History Page: Allows users to view past drinking records to help them analyze and adjust their drinking habits.
 - Drinking water reminder alarm page: Users can enable or turn off drinking water reminders, select the reminder frequency, and set a specific time period (such as night) to avoid receiving reminders.
 
 In addition, the application also supports use with a physical device equipped with a water level sensor that automatically records the amount of water when the user drinks water and synchronizes it to the application.
-Suitable for users who are concerned about healthy drinking water and want to improve their drinking habits through technical means, Drinking Water Simulator provides a simple and effective solution.
+Suitable for users who are concerned about healthy drinking water and want to improve their drinking habits through technical means, Drinking Water Simulator provides a simple and effective solution.  
+
 
 <table>
   <tr>
