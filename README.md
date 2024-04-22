@@ -40,7 +40,8 @@ Drinking water data is uploaded and saved in firebase cloud firebase. In order t
 ![Storyboard](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/Storyboard.jpg)
 ![UI](https://github.com/ChaceHH-H/casa0015-HHC/blob/main/UI%20design/UI-1.png)
 
-## Include A Section That Tells Developers How To Install The App
+## Include A Section That Tells Developers How To Install The App  
+The application installation package is in the APK folder. If you need to use the android studio emulator, please set the emulator as shown in the picture.  
 <img width="377" alt="屏幕截图 2024-04-22 033701" src="https://github.com/ChaceHH-H/casa0015-HHC/assets/146041784/c651e3f7-80f4-41e9-9b35-b7b9281e63b5">
 
 
